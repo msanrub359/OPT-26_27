@@ -1,0 +1,19 @@
+{
+  "name": "03-estructuranode",
+  "version": "1.0.1",
+  "description": "El primer proyecto en node.js",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/03-app.js",
+    "dev": "node --watch ./src/03-app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "cowsay": "^1.6.0",
+    "inquirer": "^14.2.5"
+  }
+}
