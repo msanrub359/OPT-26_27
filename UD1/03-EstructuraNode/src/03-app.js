@@ -81,12 +81,12 @@ const appEstudiante = (() => {
         const estudiante = {
             nombre,
             notas: aNotas,
-            promedio:promedio.toFixed(2),
+            promedio: promedio.toFixed(2),
             observacion: promedio >= 5 ? 'Aprobado' : 'Suspenso'
         }
-         try {
+        try {
             //grabar el estudiante en el fichero
-            const estudiantes = await leerEstudiantes() ; //leer del fichero
+            const estudiantes = await leerEstudiantes(); //leer del fichero
             estudiantes.push(estudiante); //añade el nuevo estudiante en el array
             await guardarEstudiantes(estudiantes);
             console.log(`El estudiante ${nombre} ha sido grabado con éxito`);
@@ -95,29 +95,61 @@ const appEstudiante = (() => {
         }
 
     }
-    const listarEstudiantes = async() => {
+    const listarEstudiantes = async () => {
         try {
-           const estudiantes = await leerEstudiantes();
-           if (estudiantes.length==0){
-            console.log('No hay estudiantes registsrados');
-            return;
-           };
-           const listado=estudiantes.map(estudiante =>(
-            {
-                Nombre: estudiante.nombre,
-                Promedio: estudiante.promedio,
-                Observacion:estudiante.observacion
-            }
-           ))
-           console.log("===== ESTUDIANTES REGISTRADOS =====");
-           console.table(listado)
+            const estudiantes = await leerEstudiantes();
+            if (estudiantes.length == 0) {
+                console.log('No hay estudiantes registsrados');
+                return;
+            };
+            const listado = estudiantes.map(estudiante => (
+                {
+                    Nombre: estudiante.nombre,
+                    Promedio: estudiante.promedio,
+                    Observacion: estudiante.observacion
+                }
+            ))
+            console.log("===== ESTUDIANTES REGISTRADOS =====");
+            console.table(listado)
         } catch (error) {
             console.log(`Error-> ${error.message}`);
         }
-        
-    }
-    const consultarEstudiante = () => {
 
+    }
+    /**
+     * @description Se mostrarán los nombres de alumnos y se seleccionará uno para mostrar sus datos
+     * @returns 
+     */
+    const consultarEstudiante = async () => {
+        try {
+            const estudiantes = await leerEstudiantes();
+            if (estudiantes.length == 0) {
+                console.log('No hay estudiantes registsrados');
+                return;
+            }
+
+            const { indice } = await inquirer.prompt([
+                {
+                    type: 'rawlist',
+                    name: 'indice',
+                    message: 'Seleccione un estudiante',
+                    choices: estudiantes.map((estudiante, index) => ({
+                        name: estudiante.nombre,
+                        value: index
+                    })
+                    )
+                }
+            ]);
+            //acceder al estudiante
+            const estudiante=estudiantes.at(indice); // estudiantes[indice]
+            console.log (`\n========Notas del estudiante ${estudiante.nombre}`);
+            console.log(`Notas: ${estudiante.notas.join(" - ")}`);
+            console.log(`Promedio: ${estudiante.promedio}`);
+            console.log(`Observación: ${estudiante.observacion}`);
+        }
+        catch (error) {
+            console.log(object);
+        }
     }
     const init = async () => {
         let opcion;
